@@ -6,8 +6,8 @@ import GoogleMap from '../components/GoogleMap';
 const HideScreen = () => {
   return (
     <View style={styles.container}>
-      {/* <GoogleMap /> */}
-      <NavigationButton buttonText="Info" targetScreen="Info"/>
+      <GoogleMap />
+      {/* <NavigationButton buttonText="Info" targetScreen="Info"/> */}
     </View>
   );
 };
