@@ -7,7 +7,6 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <GoogleMap />
-      {/* <NavigationButton buttonText="Info" targetScreen="Info"/> */}
     </View>
   );
 };
