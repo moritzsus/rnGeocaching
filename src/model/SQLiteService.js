@@ -1,6 +1,6 @@
-import * as SQLite from 'expo-sqlite';
+import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase('geocache.db');
+const db = SQLite.openDatabase("geocache.db");
 
 class SQLiteService {
   static initializeDatabase() {
@@ -8,7 +8,7 @@ class SQLiteService {
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS geocaches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, latitude REAL, longitude REAL, elevation REAL, isFound INTEGER, foundTime TEXT)',
+            "CREATE TABLE IF NOT EXISTS geocaches (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, latitude REAL, longitude REAL, elevation REAL, isFound INTEGER, foundTime TEXT)",
             [],
             () => {
               resolve();
@@ -30,7 +30,7 @@ class SQLiteService {
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'INSERT INTO geocaches (name, latitude, longitude, elevation, isFound, foundTime) VALUES (?, ?, ?, ?, ?, ?)',
+            "INSERT INTO geocaches (name, latitude, longitude, elevation, isFound, foundTime) VALUES (?, ?, ?, ?, ?, ?)",
             [
               geocacheData.name,
               geocacheData.latitude,
@@ -59,11 +59,12 @@ class SQLiteService {
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'SELECT * FROM geocaches WHERE name = ?',
+            "SELECT * FROM geocaches WHERE name = ?",
             [name],
             (_, result) => {
               // check if geocache with given name exists
-              const geocache = result.rows.length > 0 ? result.rows.item(0) : null;
+              const geocache =
+                result.rows.length > 0 ? result.rows.item(0) : null;
               resolve(geocache);
             },
             (_, error) => {
@@ -83,7 +84,7 @@ class SQLiteService {
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'SELECT * FROM geocaches',
+            "SELECT * FROM geocaches",
             [],
             (_, { rows }) => {
               const geocaches = rows._array;
@@ -101,12 +102,62 @@ class SQLiteService {
     });
   }
 
+  static getFoundGeocaches() {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM geocaches WHERE isFound = 1",
+          [],
+          (tx, results) => {
+            const foundGeocaches = [];
+            for (let i = 0; i < results.rows.length; i++) {
+              foundGeocaches.push(results.rows.item(i));
+            }
+            resolve(foundGeocaches);
+          },
+          (error) => {
+            console.error(
+              "Fehler beim Abrufen der gefundenen Geocaches",
+              error
+            );
+            reject(error);
+          }
+        );
+      });
+    });
+  }
+
+  static getHiddenGeocaches() {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM geocaches WHERE isFound = 0",
+          [],
+          (tx, results) => {
+            const foundGeocaches = [];
+            for (let i = 0; i < results.rows.length; i++) {
+              foundGeocaches.push(results.rows.item(i));
+            }
+            resolve(foundGeocaches);
+          },
+          (error) => {
+            console.error(
+              "Fehler beim Abrufen der gefundenen Geocaches",
+              error
+            );
+            reject(error);
+          }
+        );
+      });
+    });
+  }
+
   static async clearDatabase() {
     return new Promise((resolve, reject) => {
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'DELETE FROM geocaches',
+            "DELETE FROM geocaches",
             [],
             (_, result) => {
               resolve();

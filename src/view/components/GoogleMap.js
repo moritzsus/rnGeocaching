@@ -5,6 +5,8 @@ import * as Location from 'expo-location';
 
 const GoogleMap = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
+  //currentLocation.latitude = 49.4403;
+  //currentLocation.longitude = 11.8633;
 
   useEffect(() => {
     getCurrentLocation();

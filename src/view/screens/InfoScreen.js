@@ -1,36 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
+import GeocacheList from "../components/GeocachesList";
 
 const InfoScreen = () => {
-  const [geocaches, setGeocaches] = useState([]);
-
-  useEffect(() => {
-    fetchGeocaches();
-  }, []);
-
-  const fetchGeocaches = async () => {
-    try {
-      await GeocacheViewModel.initializeDatabase();
-      const geocachesData = await GeocacheViewModel.getGeocaches();
-      setGeocaches(geocachesData);
-    } catch (error) {
-      console.error("Fehler beim Abrufen der Geocaches", error);
-    }
-  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>InfoScreen</Text>
-      <FlatList
-        data={geocaches}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.geocacheContainer}>
-            <Text style={styles.geocacheName}>{item.name}</Text>
-          </View>
-        )}
-      />
+      <GeocacheList geocacheType={1} isOverlay={false} />
+      <GeocacheList geocacheType={2} isOverlay={false} />
     </View>
   );
 };

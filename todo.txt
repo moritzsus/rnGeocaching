@@ -1,2 +1,5 @@
 - console.logs entfernen oder durch Toasts ersetzen
 - includes überprüfen
+- BUG: default koordinaten falls map schneller rendernt als koordinaten gespeichert sind (oder neu rendern anstoßen?)
+- modal variante von GeocachesList.js: onClose richtig implementieren
+- list items in modal variante ein onClick geben -> modal nur in map angezeigt -> auswählen zum verstecken
