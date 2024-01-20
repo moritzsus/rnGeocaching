@@ -8,7 +8,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import SQLiteService from "../../model/SQLiteService";
+import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
+import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 
 // geocacheType: 0 for all caches, 1 for all found caches, 2 for all hidden caches
 const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
@@ -25,15 +26,15 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
       let foundGeocachesData;
       switch (geocacheType) {
         case 0:
-          foundGeocachesData = await SQLiteService.getGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getGeocaches();
           setListheaderText("Geocaches");
           break;
         case 1:
-          foundGeocachesData = await SQLiteService.getFoundGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getFoundGeocaches();
           setListheaderText("Gefundene Geocaches");
           break;
         case 2:
-          foundGeocachesData = await SQLiteService.getHiddenGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getHiddenGeocaches();
           setListheaderText("Versteckte Geocaches");
           break;
         default:
@@ -45,9 +46,16 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
     }
   };
 
-  function handleTextPress(text) {
+  function handleTextPress(geocacheName) {
     //TODO cache in datenbank auf hidden setzen, position abspeichern und marker setzen
-    console.log(text);
+    currentLocationLat = GoogleMapViewModel.getLocationLat();
+    currentLocationLon = GoogleMapViewModel.getLocationLon();
+
+    console.log(currentLocationLat);
+    console.log(currentLocationLon);
+
+    GeocacheViewModel.hideGeocache(geocacheName, currentLocationLat, currentLocationLon);
+    GoogleMapViewModel.notifyGeocacheHidden();
   }
 
   if (isOverlay) {

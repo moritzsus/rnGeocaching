@@ -3,7 +3,7 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("geocache.db");
 
 class SQLiteService {
-  static initializeDatabase() {
+  static async initializeDatabase() {
     return new Promise((resolve, reject) => {
       db.transaction(
         (tx) => {
@@ -25,7 +25,7 @@ class SQLiteService {
     });
   }
 
-  static addGeocache(geocacheData) {
+  static async addGeocache(geocacheData) {
     return new Promise((resolve, reject) => {
       db.transaction(
         (tx) => {
@@ -54,7 +54,7 @@ class SQLiteService {
     });
   }
 
-  static getGeocacheByName(name) {
+  static async getGeocacheByName(name) {
     return new Promise((resolve, reject) => {
       db.transaction(
         (tx) => {
@@ -79,7 +79,7 @@ class SQLiteService {
     });
   }
 
-  static getGeocaches() {
+  static async getGeocaches() {
     return new Promise((resolve, reject) => {
       db.transaction(
         (tx) => {
@@ -102,7 +102,7 @@ class SQLiteService {
     });
   }
 
-  static getFoundGeocaches() {
+  static async getFoundGeocaches() {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
@@ -127,7 +127,7 @@ class SQLiteService {
     });
   }
 
-  static getHiddenGeocaches() {
+  static async getHiddenGeocaches() {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
@@ -150,6 +150,23 @@ class SQLiteService {
         );
       });
     });
+  }
+
+  static async hideGeocache(geocacheName, lat, lon) {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'UPDATE geocaches SET isFound = 0, latitude = ?, longitude = ? WHERE name = ?',
+          [lat, lon, geocacheName],
+          (_, result) => {
+            resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          },
+        );
+      });
+    })
   }
 
   static async clearDatabase() {

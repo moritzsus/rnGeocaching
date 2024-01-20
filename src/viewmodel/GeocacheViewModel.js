@@ -3,6 +3,7 @@ import Geocache from '../model/Geocache';
 
 class GeocacheViewModel {
   static async initializeDatabase() {
+    //SQLiteService.clearDatabase();
     try {
       await SQLiteService.initializeDatabase();
     } catch (error) {
@@ -66,6 +67,35 @@ class GeocacheViewModel {
     } catch (error) {
       console.error('Fehler beim Abrufen der Geocaches', error);
       return [];
+    }
+  }
+
+  static async getFoundGeocaches() {
+    try {
+      const geocaches = await SQLiteService.getFoundGeocaches();
+      return geocaches;
+    } catch (error) {
+      console.error('Fehler beim Abrufen der Geocaches', error);
+      return [];
+    }
+  }
+
+  static async getHiddenGeocaches() {
+    try {
+      const geocaches = await SQLiteService.getHiddenGeocaches();
+      return geocaches;
+    } catch (error) {
+      console.error('Fehler beim Abrufen der Geocaches', error);
+      return [];
+    }
+  }
+
+  static async hideGeocache(geocacheName, lat, lon) {
+    try {
+      await SQLiteService.hideGeocache(geocacheName, lat, lon);
+      console.log("Geocache hidden: " + geocacheName);
+    } catch (error) {
+      console.error('Fehler beim Abrufen der Geocaches', error);
     }
   }
 }
