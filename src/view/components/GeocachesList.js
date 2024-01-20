@@ -1,4 +1,3 @@
-// GeocacheList.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -7,11 +6,13 @@ import {
   StyleSheet,
   Modal,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
-import SQLiteService from "../../model/SQLiteService";
+import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
+import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 
 // geocacheType: 0 for all caches, 1 for all found caches, 2 for all hidden caches
-const GeocacheList = ({ geocacheType, isOverlay }) => {
+const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
   const [geocaches, setFoundGeocaches] = useState([]);
   const [listheaderText, setListheaderText] = useState([]);
 
@@ -25,15 +26,15 @@ const GeocacheList = ({ geocacheType, isOverlay }) => {
       let foundGeocachesData;
       switch (geocacheType) {
         case 0:
-          foundGeocachesData = await SQLiteService.getGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getGeocaches();
           setListheaderText("Geocaches");
           break;
         case 1:
-          foundGeocachesData = await SQLiteService.getFoundGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getFoundGeocaches();
           setListheaderText("Gefundene Geocaches");
           break;
         case 2:
-          foundGeocachesData = await SQLiteService.getHiddenGeocaches();
+          foundGeocachesData = await GeocacheViewModel.getHiddenGeocaches();
           setListheaderText("Versteckte Geocaches");
           break;
         default:
@@ -45,8 +46,16 @@ const GeocacheList = ({ geocacheType, isOverlay }) => {
     }
   };
 
-  function onClose() {
-    console.log("Close");
+  function handleTextPress(geocacheName) {
+    //TODO cache in datenbank auf hidden setzen, position abspeichern und marker setzen
+    currentLocationLat = GoogleMapViewModel.getLocationLat();
+    currentLocationLon = GoogleMapViewModel.getLocationLon();
+
+    console.log(currentLocationLat);
+    console.log(currentLocationLon);
+
+    GeocacheViewModel.hideGeocache(geocacheName, currentLocationLat, currentLocationLon);
+    GoogleMapViewModel.notifyGeocacheHidden();
   }
 
   if (isOverlay) {
@@ -55,18 +64,19 @@ const GeocacheList = ({ geocacheType, isOverlay }) => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={true}
         onRequestClose={onClose}
       >
         <View style={styles.container}>
           <View style={styles.content}>
-            <Text style={styles.header}>{listheaderText}</Text>
+            <Text style={styles.header}>Geocache wählen</Text>
             <FlatList
               data={geocaches}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <View style={styles.geocacheContainer}>
-                  <Text style={styles.geocacheName}>{item.name}</Text>
+                  <TouchableOpacity onPress={() => handleTextPress(item.name)}>
+                    <Text style={styles.geocacheName}>{item.name}</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             />
