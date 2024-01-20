@@ -3,7 +3,6 @@ import { View, Image, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
-import FastImage from 'react-native-fast-image';
 
 
 const GoogleMap = () => {

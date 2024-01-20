@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
+import NavigationButton from "./NavigationButton";
+import QRCodeScannerViewModel from "../../viewmodel/QRCodeScannerViewModel";
+import HideScreenViewModel from "../../viewmodel/HideScreenViewModel";
 
 // geocacheType: 0 for all caches, 1 for all found caches, 2 for all hidden caches
 const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
@@ -19,6 +22,7 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
   useEffect(() => {
     // Beim Laden der Komponente die gefundenen Geocaches aus der Datenbank abrufen
     fetchFoundGeocaches();
+    QRCodeScannerViewModel.setOnQRCodeScanned(handleTextPress);
   }, []);
 
   const fetchFoundGeocaches = async () => {
@@ -54,18 +58,18 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
     console.log(currentLocationLat);
     console.log(currentLocationLon);
 
-    GeocacheViewModel.hideGeocache(geocacheName, currentLocationLat, currentLocationLon);
+    GeocacheViewModel.hideGeocache(
+      geocacheName,
+      currentLocationLat,
+      currentLocationLon
+    );
     GoogleMapViewModel.notifyGeocacheHidden();
   }
 
   if (isOverlay) {
     // Modal-Version der Komponente
     return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        onRequestClose={onClose}
-      >
+      <Modal animationType="slide" transparent={true} onRequestClose={onClose}>
         <View style={styles.container}>
           <View style={styles.content}>
             <Text style={styles.header}>Geocache wählen</Text>
@@ -83,6 +87,10 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
             <TouchableHighlight style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableHighlight>
+            <NavigationButton
+              buttonText="Scan QR Code"
+              targetScreen="QRScanner"
+            />
           </View>
         </View>
       </Modal>

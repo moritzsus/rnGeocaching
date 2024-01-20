@@ -3,7 +3,7 @@ import Geocache from '../model/Geocache';
 
 class GeocacheViewModel {
   static async initializeDatabase() {
-    //SQLiteService.clearDatabase();
+    SQLiteService.clearDatabase();
     try {
       await SQLiteService.initializeDatabase();
     } catch (error) {
