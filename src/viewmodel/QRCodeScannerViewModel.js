@@ -25,7 +25,6 @@ class QRCodeScannerViewModel {
   }
 
   static qrCodeScanned() {
-    console.log("DATA IN VM: " + this.scannedData);
     if (this.hideGeocache) {
       currentLocationLat = GoogleMapViewModel.getLocationLat();
       currentLocationLon = GoogleMapViewModel.getLocationLon();

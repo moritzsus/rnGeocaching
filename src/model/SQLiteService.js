@@ -38,7 +38,7 @@ class SQLiteService {
               geocacheData.longitude,
               geocacheData.elevation,
               geocacheData.isFound ? 1 : 0,
-              geocacheData.foundTime,
+              geocacheData.foundTime
             ],
             (_, result) => {
               resolve(result);

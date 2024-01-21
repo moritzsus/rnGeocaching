@@ -11,3 +11,6 @@
 - check for doppel scan -> bereits verteckte nochmal verstecken möglich?
 - elevation location
 - first time verstecken einbauen -> gefundene nicht an 0.0 position
+- Geocache Model benötigt?
+- HidescreenViewModel benötigt
+- Toast distance cooldown
