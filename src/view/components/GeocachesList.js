@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
+import { customStyles } from "../CustomStyles";
 
 // geocacheType: 0 for all caches, 1 for all found caches, 2 for all hidden caches
 const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
@@ -68,22 +69,22 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
     // Modal-Version der Komponente
     return (
       <Modal animationType="slide" transparent={true} onRequestClose={onClose}>
-        <View style={styles.container}>
-          <View style={styles.content}>
-            <Text style={styles.header}>Geocache wählen</Text>
+        <View style={customStyles.listContainerModal}>
+          <View style={customStyles.listContentModal}>
+            <Text style={customStyles.listHeaderText}>Geocache wählen</Text>
             <FlatList
               data={geocaches}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
-                <View style={styles.geocacheContainer}>
+                <View style={customStyles.listItemContainer}>
                   <TouchableOpacity onPress={() => handleTextPress(item.name)}>
-                    <Text style={styles.geocacheName}>{item.name}</Text>
+                    <Text style={customStyles.listItemText}>{item.name}</Text>
                   </TouchableOpacity>
                 </View>
               )}
             />
-            <TouchableHighlight style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.closeButtonText}>Close</Text>
+            <TouchableHighlight style={customStyles.closeButton} onPress={onClose}>
+              <Text style={customStyles.closeButtonText}>Close</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -93,58 +94,19 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
 
   // Direkte Version der Komponente
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{listheaderText}</Text>
+    <View style={customStyles.listContainer}>
+      <Text style={customStyles.listHeaderText}>{listheaderText}</Text>
       <FlatList
         data={geocaches}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.geocacheContainer}>
-            <Text style={styles.geocacheName}>{item.name}</Text>
+          <View style={customStyles.listItemContainer}>
+            <Text style={customStyles.listItemText}>{item.name}</Text>
           </View>
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    marginBottom: 50,
-  },
-  content: {
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 8,
-    width: "80%",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  geocacheContainer: {
-    marginBottom: 10,
-  },
-  geocacheName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  closeButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: "blue",
-    borderRadius: 8,
-    alignSelf: "flex-end",
-  },
-  closeButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-});
 
 export default GeocacheList;
