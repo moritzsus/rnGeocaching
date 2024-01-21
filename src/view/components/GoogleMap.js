@@ -56,8 +56,9 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     if (lastKnownLocation) {
       let lat = lastKnownLocation.coords.latitude;
       let lon = lastKnownLocation.coords.longitude;
+      let ele = lastKnownLocation.coords.altitude;
 
-      GoogleMapViewModel.updateLocation(lat, lon);
+      GoogleMapViewModel.updateLocation(lat, lon, ele);
       calculateDistances(lat, lon);
     }
   };

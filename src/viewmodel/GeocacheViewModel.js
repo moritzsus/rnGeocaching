@@ -91,9 +91,9 @@ class GeocacheViewModel {
     }
   }
 
-  static async hideGeocache(geocacheName, lat, lon) {
+  static async hideGeocache(geocacheName, lat, lon, ele) {
     try {
-      await SQLiteService.hideGeocache(geocacheName, lat, lon);
+      await SQLiteService.hideGeocache(geocacheName, lat, lon, ele);
       MessageManager.showToastMessage("Geocache hidden: " + geocacheName);
     } catch (error) {
       console.error('Fehler beim Abrufen der Geocaches', error);
