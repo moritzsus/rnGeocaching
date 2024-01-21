@@ -21,18 +21,20 @@ class XMLParser {
       .att("xmlns", "http://www.topografix.com/GPX/1/0");
 
     geocaches.forEach((geocache) => {
-      const wpt = root.ele("wpt", {
-        lat: geocache.latitude,
-        lon: geocache.longitude,
-      });
-      wpt.ele("name", {}, geocache.name);
-      wpt.ele("ele", {}, geocache.elevation);
+      if (geocache.latitude != 1000) { // 1000 invlid sign
+        const wpt = root.ele("wpt", {
+          lat: geocache.latitude,
+          lon: geocache.longitude,
+        });
+        wpt.ele("name", {}, geocache.name);
+        wpt.ele("ele", {}, geocache.elevation);
 
-      if (geocache.isFound) {
-        wpt.ele("desc", {}, "gefunden");
-        wpt.ele("time", {}, geocache.foundTime);
-      } else {
-        wpt.ele("desc", {}, "nicht gefunden");
+        if (geocache.isFound) {
+          wpt.ele("desc", {}, "gefunden");
+          wpt.ele("time", {}, geocache.foundTime);
+        } else {
+          wpt.ele("desc", {}, "nicht gefunden");
+        }
       }
     });
 
@@ -51,7 +53,6 @@ class XMLParser {
       console.error("Error saving GPX file:", error);
     }
   };
-
 }
 
 export default XMLParser;
