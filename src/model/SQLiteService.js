@@ -153,12 +153,12 @@ class SQLiteService {
     });
   }
 
-  static async hideGeocache(geocacheName, lat, lon) {
+  static async hideGeocache(geocacheName, lat, lon, ele) {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
-          'UPDATE geocaches SET isFound = 0, latitude = ?, longitude = ? WHERE name = ?',
-          [lat, lon, geocacheName],
+          'UPDATE geocaches SET isFound = 0, latitude = ?, longitude = ?, elevation = ? WHERE name = ?',
+          [lat, lon, ele, geocacheName],
           (_, result) => {
             resolve(result);
           },

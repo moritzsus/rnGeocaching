@@ -26,13 +26,15 @@ class QRCodeScannerViewModel {
 
   static qrCodeScanned() {
     if (this.hideGeocache) {
-      currentLocationLat = GoogleMapViewModel.getLocationLat();
-      currentLocationLon = GoogleMapViewModel.getLocationLon();
+      const currentLocationLat = GoogleMapViewModel.getLocationLat();
+      const currentLocationLon = GoogleMapViewModel.getLocationLon();
+      const currentLocationEle = GoogleMapViewModel.getLocationEle();
 
       GeocacheViewModel.hideGeocache(
         this.scannedData,
         currentLocationLat,
-        currentLocationLon
+        currentLocationLon,
+        currentLocationEle
       );
       GoogleMapViewModel.notifyGeocacheUpdate();
     } else {

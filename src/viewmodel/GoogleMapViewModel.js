@@ -3,6 +3,7 @@ import SQLiteService from "../model/SQLiteService";
 class GoogleMapViewModel {
   static locationLat = 0;
   static locationLon = 0;
+  static locationEle = 0;
 
   static radius = 50;
 
@@ -12,9 +13,10 @@ class GoogleMapViewModel {
     this.radius = radius;
   }
 
-  static updateLocation(lat, lon) {
+  static updateLocation(lat, lon, ele) {
     this.locationLat = lat;
     this.locationLon = lon;
+    this.locationEle = ele;
   }
 
   static getLocationLat() {
@@ -23,6 +25,10 @@ class GoogleMapViewModel {
 
   static getLocationLon() {
     return this.locationLon;
+  }
+
+  static getLocationEle() {
+    return this.locationEle;
   }
 
   static async getHiddenGeocaches() {
