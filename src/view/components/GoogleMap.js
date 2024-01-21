@@ -4,6 +4,7 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 import * as geolib from "geolib";
+import MessageManager from "../../viewmodel/MessageManager";
 
 const GoogleMap = ({ inHideGeocachesMode }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -37,12 +38,10 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     try {
       if (inHideGeocachesMode) {
         const geocaches = await GoogleMapViewModel.getHiddenGeocaches();
-        console.log("Fetched Hidden Geocaches");
         setNeededGeocaches(geocaches);
       } else {
         const geocaches = await GoogleMapViewModel.getFoundGeocaches();
         const hiddenCaches = await GoogleMapViewModel.getHiddenGeocaches();
-        console.log("Fetched Found Geocaches");
         setNeededGeocaches(geocaches);
         setHiddenGeocaches(hiddenCaches);
       }
@@ -70,8 +69,6 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
   const calculateDistances = (currentLat, currentLon) => {
     const currentLoc = { latitude: currentLat, longitude: currentLon };
 
-    console.log("LEN: " + hiddenGeocaches.length);
-
     for (let i = 0; i < hiddenGeocaches.length; i++) {
       const geoLat = hiddenGeocaches[i].latitude;
       const geoLon = hiddenGeocaches[i].longitude;
@@ -80,11 +77,8 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
       const distance = geolib.getDistance(currentLoc, geocacheLoc);
 
       if (distance < GoogleMapViewModel.radius) {
-        ToastAndroid.show(
-          hiddenGeocaches[i].name + " is near!",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
+        MessageManager.showToastMessage(hiddenGeocaches[i].name + " is near!");
+        MessageManager.textToSpeech(hiddenGeocaches[i].name + " is near!");
       }
     }
   };

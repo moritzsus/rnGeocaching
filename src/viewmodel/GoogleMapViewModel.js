@@ -8,6 +8,10 @@ class GoogleMapViewModel {
 
   static onGeocacheUpdateCallback = null;
 
+  static setRadius(radius) {
+    this.radius = radius;
+  }
+
   static updateLocation(lat, lon) {
     this.locationLat = lat;
     this.locationLon = lon;
