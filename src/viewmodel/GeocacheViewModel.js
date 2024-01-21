@@ -98,6 +98,15 @@ class GeocacheViewModel {
       console.error('Fehler beim Abrufen der Geocaches', error);
     }
   }
+
+  static async findGeocache(geocacheName) {
+    try {
+      await SQLiteService.findGeocache(geocacheName);
+      console.log("Geocache found: " + geocacheName);
+    } catch (error) {
+      console.error('Fehler beim Finden des Geocaches', error);
+    }
+  }
 }
 
 export default GeocacheViewModel;

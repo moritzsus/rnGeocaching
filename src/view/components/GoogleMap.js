@@ -4,15 +4,14 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 
-
-const GoogleMap = () => {
+const GoogleMap = ({ inHideGeocachesMode }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [hiddenGeocaches, setHiddenGeocaches] = useState([]);
+  const [neededGeocaches, setNeededGeocaches] = useState([]);
 
   useEffect(() => {
     getCurrentLocation();
-    loadHiddenGeocaches();
-    GoogleMapViewModel.setOnGeocacheHiddenCallback(handleGeocacheHidden);
+    loadNeededGeocaches();
+    GoogleMapViewModel.setOnGeocacheUpdateCallback(handleGeocacheUpdate);
   }, []);
 
   const getCurrentLocation = async () => {
@@ -31,15 +30,20 @@ const GoogleMap = () => {
       console.error("Failed to get current Location", error);
     }
   };
-
-  const loadHiddenGeocaches = async () => {
+  
+  const loadNeededGeocaches = async () => {
     try {
-      // Rufe die Liste der nicht gefundenen Geocaches aus GoogleMapViewModel ab
-      const geocaches = await GoogleMapViewModel.getHiddenGeocaches();
-      setHiddenGeocaches(geocaches);
-      console.log("Loaded hidden Geocaches");
+      if (inHideGeocachesMode) {
+        const geocaches = await GoogleMapViewModel.getHiddenGeocaches();
+        console.log("Fetched Hidden Geocaches");
+        setNeededGeocaches(geocaches);
+      } else {
+        const geocaches = await GoogleMapViewModel.getFoundGeocaches();
+        console.log("Fetched Found Geocaches");
+        setNeededGeocaches(geocaches);
+      }
     } catch (error) {
-      console.error("Fehler beim Laden der nicht gefundenen Geocaches", error);
+      console.error("Fehler beim Laden der Geocaches", error);
     }
   };
 
@@ -54,8 +58,8 @@ const GoogleMap = () => {
     }
   };
 
-  const handleGeocacheHidden = async () => {
-    loadHiddenGeocaches();
+  const handleGeocacheUpdate = async () => {
+    loadNeededGeocaches();
   };
 
   return (
@@ -75,8 +79,8 @@ const GoogleMap = () => {
           followsUserLocation={true}
           onUserLocationChange={handleUserLocationChange}
         >
-          {/* Markiere alle nicht gefundenen Geocaches */}
-          {hiddenGeocaches.map((geocache) => (
+          {/* Markiere alle needed Geocaches */}
+          {neededGeocaches.map((geocache) => (
             <Marker
               key={geocache.id.toString()}
               coordinate={{
@@ -84,8 +88,7 @@ const GoogleMap = () => {
                 longitude: geocache.longitude,
               }}
               title={geocache.name}
-            >
-            </Marker>
+            ></Marker>
           ))}
         </MapView>
       }

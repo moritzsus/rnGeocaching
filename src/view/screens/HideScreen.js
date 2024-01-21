@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, StyleSheet } from 'react-native';
 import GoogleMap from '../components/GoogleMap';
 import GeocacheList from '../components/GeocachesList';
 import FloatingButton from '../components/FloatingButton';
 import HideScreenViewModel from '../../viewmodel/HideScreenViewModel';
+import QRCodeScannerViewModel from '../../viewmodel/QRCodeScannerViewModel';
+import QRScanButton from '../components/QRScanButton';
 
 const HideScreen = () => {
   const [isListVisible, setListVisible] = React.useState(false);
+
+  useEffect(() => {
+    QRCodeScannerViewModel.setHideGeoChache(true);
+  }, []);
 
   const changeListVisibility = () => {
     if(HideScreenViewModel.qrOpened == true) {
@@ -19,17 +25,16 @@ const HideScreen = () => {
 
   return (
     <View style={styles.container}>
-      <GoogleMap />
+      <GoogleMap inHideGeocachesMode={true} />
       {isListVisible && (
         <GeocacheList
           geocacheType={1}
           isOverlay={true}
-          //onClose={() => setListVisible(!isListVisible)}
           onClose={changeListVisibility}
         />
       )}
-      {/* <FloatingButton text={"Geocache verstecken"} onPress={() => setListVisible(!isListVisible)} /> */}
       <FloatingButton text={"Geocache verstecken"} onPress={changeListVisibility} />
+      <QRScanButton hideGeocache={true}></QRScanButton>
     </View>
   );
 };
