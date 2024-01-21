@@ -1,0 +1,13 @@
+- console.logs entfernen oder durch Toasts ersetzen
+- HomeScreen database init?
+- includes überprüfen
+- BUG: default koordinaten falls map schneller rendernt als koordinaten gespeichert sind (oder neu rendern anstoßen?)
+- modal variante von GeocachesList.js: onClose richtig implementieren
+- list items in modal variante ein onClick geben -> modal nur in map angezeigt -> auswählen zum verstecken
+- Searchscreen wie in Hidescreen map init an position (null?)
+- Bilder als marker
+- package permissions benötigt?
+- bei qr code vrstecken selben trick wie clos -> geocache verstecken muss 2 mal drücken (HidescreenViewModel) -> qr button in map nicht in list?
+- check for doppel scan -> bereits verteckte nochmal verstecken möglich?
+- elevation location
+- first time verstecken einbauen -> gefundene nicht an 0.0 position

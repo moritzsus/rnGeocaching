@@ -1,10 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
+import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
+import GeocacheList from "../components/GeocachesList";
 
 const InfoScreen = () => {
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>InfoScreen</Text>
+      <GeocacheList geocacheType={1} isOverlay={false} />
+      <GeocacheList geocacheType={2} isOverlay={false} />
     </View>
   );
 };
@@ -12,12 +16,21 @@ const InfoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-  text: {
+  header: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+
+  geocacheContainer: {
+    marginBottom: 10,
+  },
+  geocacheName: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
