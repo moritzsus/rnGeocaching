@@ -20,10 +20,7 @@ const QRScannerScreen = () => {
   const handleBarcodeScanned = ({type, data}) => {
     setScanData(data);
     QRCodeScannerViewModel.setScannedData(data);
-    console.log("Scanned: " + type + ", " + data);
     QRCodeScannerViewModel.qrCodeScanned();
-    
-    //TODO Toast
 
     navigation.goBack();
   }

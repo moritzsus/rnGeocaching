@@ -1,5 +1,6 @@
 import SQLiteService from '../model/SQLiteService';
 import Geocache from '../model/Geocache';
+import MessageManager from './MessageManager';
 
 class GeocacheViewModel {
   static async initializeDatabase() {
@@ -93,7 +94,7 @@ class GeocacheViewModel {
   static async hideGeocache(geocacheName, lat, lon) {
     try {
       await SQLiteService.hideGeocache(geocacheName, lat, lon);
-      console.log("Geocache hidden: " + geocacheName);
+      MessageManager.showToastMessage("Geocache hidden: " + geocacheName);
     } catch (error) {
       console.error('Fehler beim Abrufen der Geocaches', error);
     }
@@ -102,7 +103,7 @@ class GeocacheViewModel {
   static async findGeocache(geocacheName) {
     try {
       await SQLiteService.findGeocache(geocacheName);
-      console.log("Geocache found: " + geocacheName);
+      MessageManager.showToastMessage("Geocache found: " + geocacheName);
     } catch (error) {
       console.error('Fehler beim Finden des Geocaches', error);
     }

@@ -57,6 +57,8 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
       currentLocationLon
     );
     GoogleMapViewModel.notifyGeocacheUpdate();
+
+    onClose();
   }
 
   if (isOverlay) {
