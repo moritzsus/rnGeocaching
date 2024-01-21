@@ -4,6 +4,8 @@ class GoogleMapViewModel {
   static locationLat = 0;
   static locationLon = 0;
 
+  static radius = 50;
+
   static onGeocacheUpdateCallback = null;
 
   static updateLocation(lat, lon) {
