@@ -10,6 +10,7 @@ import {
 import GeocacheList from "../components/GeocachesList";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 import MessageManager from "../../viewmodel/MessageManager";
+import XMLParser from "../../viewmodel/XMLParser";
 
 const InfoScreen = () => {
   const [textValue, setTextValue] = useState("50");
@@ -38,6 +39,10 @@ const InfoScreen = () => {
     setIsSoundEnabled(!isSoundEnabled);
   };
 
+  const handleExportButton = () => {
+    XMLParser.exportFile();
+  }
+
   return (
     <View style={styles.container}>
       {/* TextInput und OK-Button */}
@@ -64,6 +69,8 @@ const InfoScreen = () => {
       </View>
       <GeocacheList geocacheType={1} isOverlay={false} />
       <GeocacheList geocacheType={2} isOverlay={false} />
+
+      <Button title="Export GPX" onPress={handleExportButton} />
     </View>
   );
 };
