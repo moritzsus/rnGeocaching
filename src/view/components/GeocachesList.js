@@ -48,15 +48,20 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
 
   function handleTextPress(geocacheName) {
     //TODO cache in datenbank auf hidden setzen, position abspeichern und marker setzen
-    currentLocationLat = GoogleMapViewModel.getLocationLat();
-    currentLocationLon = GoogleMapViewModel.getLocationLon();
+    const currentLocationLat = GoogleMapViewModel.getLocationLat();
+    const currentLocationLon = GoogleMapViewModel.getLocationLon();
+    const currentLocationEle = GoogleMapViewModel.getLocationEle();
+    
 
     GeocacheViewModel.hideGeocache(
       geocacheName,
       currentLocationLat,
-      currentLocationLon
+      currentLocationLon,
+      currentLocationEle
     );
     GoogleMapViewModel.notifyGeocacheUpdate();
+
+    onClose();
   }
 
   if (isOverlay) {

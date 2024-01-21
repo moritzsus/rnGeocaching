@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, ToastAndroid, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
+import * as geolib from "geolib";
+import MessageManager from "../../viewmodel/MessageManager";
 
 const GoogleMap = ({ inHideGeocachesMode }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [neededGeocaches, setNeededGeocaches] = useState([]);
+  const [hiddenGeocaches, setHiddenGeocaches] = useState([]);
 
   useEffect(() => {
     getCurrentLocation();
@@ -30,17 +33,17 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
       console.error("Failed to get current Location", error);
     }
   };
-  
+
   const loadNeededGeocaches = async () => {
     try {
       if (inHideGeocachesMode) {
         const geocaches = await GoogleMapViewModel.getHiddenGeocaches();
-        console.log("Fetched Hidden Geocaches");
         setNeededGeocaches(geocaches);
       } else {
         const geocaches = await GoogleMapViewModel.getFoundGeocaches();
-        console.log("Fetched Found Geocaches");
+        const hiddenCaches = await GoogleMapViewModel.getHiddenGeocaches();
         setNeededGeocaches(geocaches);
+        setHiddenGeocaches(hiddenCaches);
       }
     } catch (error) {
       console.error("Fehler beim Laden der Geocaches", error);
@@ -53,13 +56,32 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     if (lastKnownLocation) {
       let lat = lastKnownLocation.coords.latitude;
       let lon = lastKnownLocation.coords.longitude;
+      let ele = lastKnownLocation.coords.altitude;
 
-      GoogleMapViewModel.updateLocation(lat, lon);
+      GoogleMapViewModel.updateLocation(lat, lon, ele);
+      calculateDistances(lat, lon);
     }
   };
 
   const handleGeocacheUpdate = async () => {
     loadNeededGeocaches();
+  };
+
+  const calculateDistances = (currentLat, currentLon) => {
+    const currentLoc = { latitude: currentLat, longitude: currentLon };
+
+    for (let i = 0; i < hiddenGeocaches.length; i++) {
+      const geoLat = hiddenGeocaches[i].latitude;
+      const geoLon = hiddenGeocaches[i].longitude;
+      const geocacheLoc = { latitude: geoLat, longitude: geoLon };
+
+      const distance = geolib.getDistance(currentLoc, geocacheLoc);
+
+      if (distance < GoogleMapViewModel.radius) {
+        MessageManager.showToastMessage(hiddenGeocaches[i].name + " is near!");
+        MessageManager.textToSpeech(hiddenGeocaches[i].name + " is near!");
+      }
+    }
   };
 
   return (

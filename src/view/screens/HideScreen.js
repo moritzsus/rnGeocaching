@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import GoogleMap from '../components/GoogleMap';
 import GeocacheList from '../components/GeocachesList';
 import FloatingButton from '../components/FloatingButton';
-import HideScreenViewModel from '../../viewmodel/HideScreenViewModel';
 import QRCodeScannerViewModel from '../../viewmodel/QRCodeScannerViewModel';
 import QRScanButton from '../components/QRScanButton';
 
@@ -15,12 +14,7 @@ const HideScreen = () => {
   }, []);
 
   const changeListVisibility = () => {
-    if(HideScreenViewModel.qrOpened == true) {
-      HideScreenViewModel.setQrOpened(false);
-      return;
-    }
     setListVisible(!isListVisible);
-    console.log("St: " + isListVisible);
   }
 
   return (
