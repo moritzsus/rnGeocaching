@@ -1,12 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { View, Text, StyleSheet } from "react-native";
-import NavigationButton from "../components/NavigationButton";
+import QRScanButton from "../components/QRScanButton";
 import GoogleMap from "../components/GoogleMap";
+import QRCodeScannerViewModel from "../../viewmodel/QRCodeScannerViewModel";
 
 const SearchScreen = () => {
+  useEffect(() => {
+    QRCodeScannerViewModel.setHideGeoChache(false);
+  }, []);
+
   return (
     <View style={styles.container}>
-      <GoogleMap />
+      <GoogleMap inHideGeocachesMode={false} />
+
+      <QRScanButton hideGeocache={false}></QRScanButton>
     </View>
   );
 };

@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite";
+import moment from 'moment';
 
 const db = SQLite.openDatabase("geocache.db");
 
@@ -167,6 +168,25 @@ class SQLiteService {
         );
       });
     })
+  }
+
+  static async findGeocache(geocacheName) {
+    return new Promise((resolve, reject) => {
+      const foundTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      
+      db.transaction((tx) => {
+        tx.executeSql(
+          'UPDATE geocaches SET isFound = 1, foundTime = ? WHERE name = ?',
+          [foundTime, geocacheName],
+          (_, result) => {
+            resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          },
+        );
+      });
+    });
   }
 
   static async clearDatabase() {
