@@ -5,6 +5,7 @@ import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 import * as geolib from "geolib";
 import MessageManager from "../../viewmodel/MessageManager";
+import CustomMarkerImage from "./CustomMarkerImage";
 
 const GoogleMap = ({ inHideGeocachesMode }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -110,7 +111,9 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
                 longitude: geocache.longitude,
               }}
               title={geocache.name}
-            ></Marker>
+            >
+              <CustomMarkerImage geochachName={geocache.name} />
+            </Marker>
           ))}
         </MapView>
       }
