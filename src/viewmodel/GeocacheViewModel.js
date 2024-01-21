@@ -24,8 +24,8 @@ class GeocacheViewModel {
               // create new Geocache and add it to database
               const newGeocache = new Geocache(
                 geocacheName,
-                0,
-                0,
+                1000,
+                1000,
                 0,
                 1,
                 "2024-01-01 00:00:00.000"
