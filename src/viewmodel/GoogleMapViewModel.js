@@ -1,5 +1,8 @@
 import SQLiteService from "../model/SQLiteService";
 
+// GoogleMapViewModel speichert regelmäßig die aktuelle Position des Users, um diese anderen Views bei Bedarf zu liefern
+// GoogleMapViewModel speichert außerdem eine Callback Funktion, die andere Views mit notifyGeocacheUpdate auslösen können,
+// wenn ein Geocache in der Datenbank geupdaten wurde (wichtig um Marker neu zu zeichnen)
 class GoogleMapViewModel {
   static locationLat = 0;
   static locationLon = 0;

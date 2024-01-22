@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import QRCodeScannerViewModel from "../../viewmodel/QRCodeScannerViewModel";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
+// Auf dem QRScannerScreen kann man die QR Codes der Geocaches scannen
 const QRScannerScreen = () => {
   const [hasCameraPermission, setHasCameraPermission] = React.useState(false);
   const [scanData, setScanData] = React.useState();
@@ -17,13 +18,14 @@ const QRScannerScreen = () => {
     })();
   }, []);
 
-  const handleBarcodeScanned = ({type, data}) => {
+  // handleBarcodeScanned liefert die gescannten Daten an QRCodeScannerViewModel und schließt den Scanner wieder
+  const handleBarcodeScanned = ({ type, data }) => {
     setScanData(data);
     QRCodeScannerViewModel.setScannedData(data);
     QRCodeScannerViewModel.qrCodeScanned();
 
     navigation.goBack();
-  }
+  };
 
   if (!hasCameraPermission) {
     return (
@@ -35,10 +37,9 @@ const QRScannerScreen = () => {
 
   return (
     <View style={styles.container}>
-      
-      <BarCodeScanner 
-      style={StyleSheet.absoluteFillObject}
-      onBarCodeScanned={scanData ? undefined : handleBarcodeScanned}
+      <BarCodeScanner
+        style={StyleSheet.absoluteFillObject}
+        onBarCodeScanned={scanData ? undefined : handleBarcodeScanned}
       />
     </View>
   );

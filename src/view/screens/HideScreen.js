@@ -1,12 +1,16 @@
-import React, {useEffect} from 'react';
-import { View, StyleSheet } from 'react-native';
-import GoogleMap from '../components/GoogleMap';
-import GeocacheList from '../components/GeocachesList';
-import FloatingButton from '../components/FloatingButton';
-import QRCodeScannerViewModel from '../../viewmodel/QRCodeScannerViewModel';
-import QRScanButton from '../components/QRScanButton';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import GoogleMap from "../components/GoogleMap";
+import GeocacheList from "../components/GeocachesList";
+import FloatingButton from "../components/FloatingButton";
+import QRCodeScannerViewModel from "../../viewmodel/QRCodeScannerViewModel";
+import QRScanButton from "../components/QRScanButton";
+import { customStyles } from "../CustomStyles";
+import InfoFab from "../components/InfoFab";
 
+// HideScreen liefert den Screen zurück, auf welchem man Geocaches verstecken kann
 const HideScreen = () => {
+  // isListVisible kontrolliert, wann die GeocacheList ein- oder ausgeblendeet werden soll
   const [isListVisible, setListVisible] = React.useState(false);
 
   useEffect(() => {
@@ -15,10 +19,10 @@ const HideScreen = () => {
 
   const changeListVisibility = () => {
     setListVisible(!isListVisible);
-  }
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={customStyles.container}>
       <GoogleMap inHideGeocachesMode={true} />
       {isListVisible && (
         <GeocacheList
@@ -27,18 +31,12 @@ const HideScreen = () => {
           onClose={changeListVisibility}
         />
       )}
-      <FloatingButton text={"Geocache verstecken"} onPress={changeListVisibility} />
+
+      <InfoFab />
+      <FloatingButton text={"Liste öffnen"} onPress={changeListVisibility} />
       <QRScanButton hideGeocache={true}></QRScanButton>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default HideScreen;
