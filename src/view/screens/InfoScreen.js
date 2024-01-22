@@ -3,9 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Switch,
-  StyleSheet,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
@@ -15,6 +13,7 @@ import MessageManager from "../../viewmodel/MessageManager";
 import XMLParser from "../../viewmodel/XMLParser";
 import { customStyles } from "../CustomStyles";
 
+// InfoScreen zeigt alle Geocache Infos und Einstellungen der App an
 const InfoScreen = () => {
   const [textValue, setTextValue] = useState("50");
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
@@ -26,6 +25,7 @@ const InfoScreen = () => {
     setIsSoundEnabled(MessageManager.audioEnabled);
   }, []);
 
+  // Setzt den eingegeben Radius in GoogleMapViewModel
   const handleOkButtonPress = () => {
     const value = parseInt(textValue, 10);
 
@@ -96,7 +96,10 @@ const InfoScreen = () => {
         <GeocacheList geocacheType={2} isOverlay={false} />
 
         {/* Export Button */}
-        <TouchableOpacity style={customStyles.navButton} onPress={handleExportButton}>
+        <TouchableOpacity
+          style={customStyles.navButton}
+          onPress={handleExportButton}
+        >
           <Text style={customStyles.navButtonText}>Export GPX</Text>
         </TouchableOpacity>
       </ImageBackground>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ToastAndroid, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
@@ -7,6 +7,8 @@ import * as geolib from "geolib";
 import MessageManager from "../../viewmodel/MessageManager";
 import CustomMarkerImage from "./CustomMarkerImage";
 
+
+// GoogleMap liefert eine GoogleMap zurück. inHideGeocachesMode sorgt dafür, welche Marker angezeigt oder verborgen werden
 const GoogleMap = ({ inHideGeocachesMode }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [neededGeocaches, setNeededGeocaches] = useState([]);
@@ -15,6 +17,8 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
   useEffect(() => {
     getCurrentLocation();
     loadNeededGeocaches();
+    // setzt die Callback Funktion in GoogleMapViewModel. Diese wird ausgelöst, wenn dich der isFound Zustand 
+    // eines Geocaches ändert, da dann ggf neue Marker gezeichnet werden müssen
     GoogleMapViewModel.setOnGeocacheUpdateCallback(handleGeocacheUpdate);
   }, []);
 
@@ -35,6 +39,8 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     }
   };
 
+  // Je nachdem welche Geocaches benötigt werden, werden diese geladen.
+  // Die Location Daten der Geocaches werden dann für die Marker benötigt
   const loadNeededGeocaches = async () => {
     try {
       if (inHideGeocachesMode) {
@@ -51,6 +57,7 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     }
   };
 
+  // handleUserLocationChange speichert regelmäßig die letzte bekannte Position des Users in GoogleMapViewModel
   const handleUserLocationChange = async (event) => {
     const lastKnownLocation = await Location.getLastKnownPositionAsync({});
 
@@ -64,10 +71,13 @@ const GoogleMap = ({ inHideGeocachesMode }) => {
     }
   };
 
+  // Callbackfunktion für GoogleMapViewModel
   const handleGeocacheUpdate = async () => {
     loadNeededGeocaches();
   };
 
+  // calculateDistances prüft, ob man sich innerhalb des eingestellten Radius eines Geocaches befindet
+  // falls ja, wird ein Toast und TTS mit Hilfe des MessageManager gesendet
   const calculateDistances = (currentLat, currentLon) => {
     const currentLoc = { latitude: currentLat, longitude: currentLon };
 

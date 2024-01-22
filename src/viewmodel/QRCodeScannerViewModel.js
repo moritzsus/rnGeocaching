@@ -1,6 +1,9 @@
 import GoogleMapViewModel from "./GoogleMapViewModel";
 import GeocacheViewModel from "./GeocacheViewModel";
 
+// QRCodeScannerViewModel ist für die Aktionen nach dem Scannen eines Geocaches zuständig
+// Basierend auf hideGeocache wird entweder die Verstecken Aktion ausgelöst oder die Finden Aktion
+// QRCodeScannerViewModel ruft auch notifyGeocacheUpdate von GoogleMapViewModel auf, um die Marker zu aktualisieren
 class QRCodeScannerViewModel {
   static onQRCodeScannedCallback = null;
   static scannedData = null;
