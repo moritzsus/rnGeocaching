@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   Modal,
   TouchableHighlight,
   TouchableOpacity,
@@ -12,47 +11,51 @@ import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
 import GoogleMapViewModel from "../../viewmodel/GoogleMapViewModel";
 import { customStyles } from "../CustomStyles";
 
-// geocacheType: 0 for all caches, 1 for all found caches, 2 for all hidden caches
+// GeocacheList liefert eine Liste von Geocaches zurück. Dabei gibt es folgende Varianten:
+// Modal Variante, welche eine Art Popup/Overlay der Liste zurückliefert, und eine direkte Version der Liste,
+// welche man direkt in einen Screen/View einbetten kann. (Wird kontrolliert durch isOverlay)
+// Man kann der Liste einen geocacheType mitgeben, um zu kontrollieren, welche Geocaches in der Liste angezeigt werden sollen:
+// geocacheType: 0 für alle Geocaches, 1 für gefundene Geocaches, 2 für versteckte Geocaches
 const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
-  const [geocaches, setFoundGeocaches] = useState([]);
+  const [geocaches, setGeocaches] = useState([]);
   const [listheaderText, setListheaderText] = useState([]);
 
   useEffect(() => {
-    // Beim Laden der Komponente die gefundenen Geocaches aus der Datenbank abrufen
-    fetchFoundGeocaches();
+    fetchGeocaches();
   }, []);
 
-  const fetchFoundGeocaches = async () => {
+  // fetchGeocaches lädt alle in der Liste benötigten Geocaches mit Hilfe des GeocacheViewModel aus der Datenbank
+  const fetchGeocaches = async () => {
     try {
-      let foundGeocachesData;
+      let geocachesData;
       switch (geocacheType) {
         case 0:
-          foundGeocachesData = await GeocacheViewModel.getGeocaches();
+          geocachesData = await GeocacheViewModel.getGeocaches();
           setListheaderText("Geocaches");
           break;
         case 1:
-          foundGeocachesData = await GeocacheViewModel.getFoundGeocaches();
+          geocachesData = await GeocacheViewModel.getFoundGeocaches();
           setListheaderText("Gefundene Geocaches");
           break;
         case 2:
-          foundGeocachesData = await GeocacheViewModel.getHiddenGeocaches();
+          geocachesData = await GeocacheViewModel.getHiddenGeocaches();
           setListheaderText("Versteckte Geocaches");
           break;
         default:
           console.log("Invalid geocacheType. Must be 0, 1 or 2.");
       }
-      setFoundGeocaches(foundGeocachesData);
+      setGeocaches(geocachesData);
     } catch (error) {
       console.error("Fehler beim Abrufen der gefundenen Geocaches", error);
     }
   };
 
+  // handleTextPress teilt dem GeocacheViewModel mit, dass der geklickte Geocache versteckt werden soll
+  // Die dafür nötigen Lacation Informationen werden aus dem GoogleMapViewModel geholt
   function handleTextPress(geocacheName) {
-    //TODO cache in datenbank auf hidden setzen, position abspeichern und marker setzen
     const currentLocationLat = GoogleMapViewModel.getLocationLat();
     const currentLocationLon = GoogleMapViewModel.getLocationLon();
     const currentLocationEle = GoogleMapViewModel.getLocationEle();
-    
 
     GeocacheViewModel.hideGeocache(
       geocacheName,
@@ -83,7 +86,10 @@ const GeocacheList = ({ geocacheType, isOverlay, onClose }) => {
                 </View>
               )}
             />
-            <TouchableHighlight style={customStyles.closeButton} onPress={onClose}>
+            <TouchableHighlight
+              style={customStyles.closeButton}
+              onPress={onClose}
+            >
               <Text style={customStyles.closeButtonText}>Close</Text>
             </TouchableHighlight>
           </View>

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, ImageBackground } from "react-native";
+import { View, ImageBackground } from "react-native";
 import NavigationButton from "../components/NavigationButton";
 import GeocacheViewModel from "../../viewmodel/GeocacheViewModel";
 import { customStyles } from "../CustomStyles";
 
+// HomeScreen zeigt den HomeScreen und bietet die Möglichkeit, zu den anderen Screens zu navigieren
 const HomeScreen = () => {
-  const backgroundImage = require('../../../assets/bg_mountains.jpg');
+  const backgroundImage = require("../../../assets/bg_mountains.jpg");
 
   useEffect(() => {
     initializeDatabase();
@@ -14,7 +15,6 @@ const HomeScreen = () => {
   const initializeDatabase = async () => {
     try {
       await GeocacheViewModel.initializeDatabase();
-      console.log("Datenbank erfolgreich initialisiert.");
     } catch (error) {
       console.error("Fehler bei der Initialisierung der Datenbank", error);
     }
@@ -22,10 +22,20 @@ const HomeScreen = () => {
 
   return (
     <View style={customStyles.imgContainer}>
-      <ImageBackground source={backgroundImage} resizeMode="cover" style={customStyles.backgroundImage}>
-        <NavigationButton buttonText="Geocaches verstecken" targetScreen="Hide" />
+      <ImageBackground
+        source={backgroundImage}
+        resizeMode="cover"
+        style={customStyles.backgroundImage}
+      >
+        <NavigationButton
+          buttonText="Geocaches verstecken"
+          targetScreen="Hide"
+        />
         <NavigationButton buttonText="Geocaches suchen" targetScreen="Search" />
-        <NavigationButton buttonText="Einstellungen & Info" targetScreen="Info" />
+        <NavigationButton
+          buttonText="Einstellungen & Info"
+          targetScreen="Info"
+        />
       </ImageBackground>
     </View>
   );
